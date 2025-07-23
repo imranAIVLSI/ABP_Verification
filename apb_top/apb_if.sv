@@ -74,6 +74,25 @@ interface apb_if(input bit PCLK, PRESET_N);
 		@(posedge PCLK) disable iff (!PRESET_N)
 		PSEL && PENABLE |-> PWAKEUP
 	endproperty
+
+	property not_sel;
+		@(posedge PCLK) disable iff (!PRESET_N)
+		PENABLE |-> PSEL
+	endproperty
+
+	property wait_limit;
+		@(posedge PCLK) disable iff (!PRESET_N)
+			PSEL && PENABLE && !PREADY |-> ##[1:3] PREADY;
+	endproperty
+
+	property transfer_done;
+		@(posedge PCLK) disable iff (!PRESET_N)
+		(PSEL && PENABLE && PREADY) |=> !PENABLE;
+	endproperty
+
+	assert property (transfer_done);
+	assert property (wait_limit);
+	assert property (not_sel);
 	assert property (awake);
 	assert property (simoultaneous_read_write);
 	assert property (stable_addr);

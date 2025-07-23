@@ -17,7 +17,7 @@ class apb_base_seq_item extends uvm_sequence_item;
 	
 	// constraints
 	constraint c_addr { addr[1:0] == 0; }
-	constraint c_delay { delay inside {[5:10]}; }
+	constraint c_delay { delay inside {[1:3]}; }
  
   //Register with uvm factory 
   `uvm_object_utils_begin(apb_base_seq_item)
