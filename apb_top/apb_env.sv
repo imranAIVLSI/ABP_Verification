@@ -2,6 +2,7 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh" 
 import apb_pkg::*;
+`include "apb_coverage.sv"
 
 class apb_env extends uvm_env;
   
@@ -12,7 +13,7 @@ class apb_env extends uvm_env;
 	apb_master_agent  master_agent;
 	apb_slave_agent  slave_agent;
   apb_virtual_sequencer v_seqr;
-  
+  apb_coverage apb_cov;
   //virtual interface for apb interface
 	virtual apb_if  vif;
   
@@ -29,7 +30,8 @@ class apb_env extends uvm_env;
   	master_agent = apb_master_agent::type_id::create("master_agent", this);
     v_seqr = apb_virtual_sequencer::type_id::create("v_seqr" , this);
     //create an instance of the slave agent
-	  slave_agent  = apb_slave_agent::type_id::create("slave_agent", this);		
+	  slave_agent  = apb_slave_agent::type_id::create("slave_agent", this);	
+    apb_cov = apb_coverage::type_id::create("apb_cov", this);	
   	if (!uvm_config_db#(virtual apb_if)::get(null, "", "apb_vif", vif)) begin
 		  `uvm_fatal(get_full_name(), "No virtual interface specified for env")
 	  end		
@@ -40,6 +42,9 @@ class apb_env extends uvm_env;
     super.connect_phase(phase);
     uvm_config_db#(apb_master_sequencer)::set(this,"*","master_seqr",master_agent.m_sequencer);
     uvm_config_db#(apb_slave_sequencer)::set(this,"*","slave_seqr",slave_agent.m_sequencer);
+
+    master_agent.m_apb_master_monitor.m_mon_port.connect(apb_cov.master_in);
+    slave_agent.m_apb_slave_monitor.s_mon_port.connect(apb_cov.slave_in);
   endfunction
   
   //print topology

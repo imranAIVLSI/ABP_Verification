@@ -8,12 +8,12 @@ class apb_slave_monitor extends uvm_monitor;
 	virtual apb_if vif;
 
   //analysis port : parameterized to apb_base_sequence item 
-	uvm_analysis_port#(apb_base_seq_item) ap;
+	uvm_analysis_port#(apb_base_seq_item) s_mon_port;
 	
 //constructor
 function new(string name, uvm_component parent);
 	super.new(name, parent);
-	ap = new("ap", this);
+	s_mon_port = new("s_mon_port", this);
 endfunction
 
 //build phase - get handle to virtual interface 
@@ -45,9 +45,9 @@ task run_phase(uvm_phase phase);
 			tr.rdata = this.vif.master.PRDATA;			
 			
 		wait  (this.vif.slave.PENABLE === 1'b0)
-		uvm_report_info("APB_SLAVE_MONITOR", $sformatf("%s",tr.apb_slave()));
-		ap.write(tr); // write to analysis port
-    tr.print();
+		`uvm_info("APB_SLAVE_MONITOR", $sformatf("%s",tr.apb_slave()),UVM_MEDIUM);
+		s_mon_port.write(tr); // write to analysis port
+    // tr.print();
 
 	end
 endtask	

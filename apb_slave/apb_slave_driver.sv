@@ -61,9 +61,9 @@ task slave_get_drive();
 
 		//handshake done back to the sequencer
 		seq_item_port.item_done();
-		//uvm_report_info("APB_SLAVE_DRIVER", $sformatf("%s",s_apb_base_seq_item.apb_slave()));
-		`uvm_info("apb_slave_driver", "finish drive", UVM_LOW)
-    //s_apb_base_seq_item.print();
+		`uvm_info("APB_SLAVE_DRIVER", $sformatf("%s",s_apb_base_seq_item.apb_slave()), UVM_MEDIUM);
+		`uvm_info("apb_slave_driver", "finish drive", UVM_MEDIUM)
+   		//  s_apb_base_seq_item.print();
 
 	end				
 endtask

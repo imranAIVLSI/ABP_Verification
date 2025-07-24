@@ -8,14 +8,14 @@ class apb_master_monitor extends uvm_monitor;
 	virtual apb_if vif;
 
   //analysis port : parameterized to apb_base_sequence item transaction
-	uvm_analysis_port#(apb_base_seq_item) ap;	
+	uvm_analysis_port#(apb_base_seq_item) m_mon_port;	
 	apb_base_seq_item tr;
 		
 //constructor
 function new(string name, uvm_component parent);
   //call the base class constructor
 	super.new(name, parent);
-	ap = new("ap", this);
+	m_mon_port = new("m_mon_port", this);
 endfunction: new
 
 //build phase - get handle to virtual interface 
@@ -46,9 +46,9 @@ task run_phase(uvm_phase phase);
 			tr.rdata = this.vif.master.PRDATA;
 		
 		wait  (this.vif.master.PENABLE === 1'b0)
-		uvm_report_info("APB_MASTER_MONITOR", $sformatf("%s",tr.apb_master()));		
-		ap.write(tr); //Write to analysis port
-		tr.print();
+		`uvm_info("APB_MASTER_MONITOR", $sformatf("%s",tr.apb_master()), UVM_MEDIUM);		
+		m_mon_port.write(tr); //Write to analysis port
+		// tr.print();
 
 	end
 endtask	

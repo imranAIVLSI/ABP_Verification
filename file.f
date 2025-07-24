@@ -18,4 +18,4 @@
 ./apb_top/apb_testbench.sv
 
 // +UVM_TESTNAME=master_test
-+UVM_VERBOSITY=UVM_HIGH
++UVM_VERBOSITY=UVM_LOW

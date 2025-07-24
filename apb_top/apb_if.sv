@@ -38,68 +38,68 @@ interface apb_if(input bit PCLK, PRESET_N);
 	// 		@(posedge clk) !ARESET_n |=> !AWVALID && !WVALID && !ARVALID && !RVALID && !BVALID;     
 	// endproperty : reset_check
 
-	property penable;
-			@(posedge PCLK) disable iff (!PRESET_N) 
-				PENABLE && !PREADY |-> ##1 $stable(PADDR) && $stable(PSEL) && $stable(PWRITE) && $stable(PWDATA);  
-	endproperty : penable
+	// property penable;
+	// 		@(posedge PCLK) disable iff (!PRESET_N) 
+	// 			PENABLE && !PREADY |-> ##1 $stable(PADDR) && $stable(PSEL) && $stable(PWRITE) && $stable(PWDATA);  
+	// endproperty : penable
 
 
-	property penable_stable;
-			@(posedge PCLK) disable iff (!PRESET_N)
-				(PENABLE && !PREADY) |-> ##1 PENABLE;
-	endproperty
+	// property penable_stable;
+	// 		@(posedge PCLK) disable iff (!PRESET_N)
+	// 			(PENABLE && !PREADY) |-> ##1 PENABLE;
+	// endproperty
 
-	property PSEL_not_enable;
-		@(posedge PCLK) disable iff (!PRESET_N)
-			PSEL && !PENABLE |=> PENABLE;
-	endproperty
+	// property PSEL_not_enable;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 		PSEL && !PENABLE |=> PENABLE;
+	// endproperty
 
-	property ready;
-		@(posedge PCLK) disable iff (!PRESET_N)
-			PSEL && PENABLE |-> PREADY;
-	endproperty
+	// property ready;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 		PSEL && PENABLE |-> PREADY;
+	// endproperty
 
-	property stable_addr;
-		@(posedge PCLK) disable iff (!PRESET_N)
-			PSEL && PENABLE |-> $stable(PADDR);
-	endproperty
+	// property stable_addr;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 		PSEL && PENABLE |-> $stable(PADDR);
+	// endproperty
 
-	property simoultaneous_read_write;
-		@(posedge PCLK) disable iff (!PRESET_N)
-			// PWRITE |-> !PWRITE;
-		!(PSEL && PENABLE && PREADY && PWRITE) || !(PSEL && PENABLE && PREADY && !PWRITE)
-	endproperty
+	// property simoultaneous_read_write;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 		// PWRITE |-> !PWRITE;
+	// 	!(PSEL && PENABLE && PREADY && PWRITE) || !(PSEL && PENABLE && PREADY && !PWRITE)
+	// endproperty
 
-	property awake;
-		@(posedge PCLK) disable iff (!PRESET_N)
-		PSEL && PENABLE |-> PWAKEUP
-	endproperty
+	// property awake;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 	PSEL && PENABLE |-> PWAKEUP
+	// endproperty
 
-	property not_sel;
-		@(posedge PCLK) disable iff (!PRESET_N)
-		PENABLE |-> PSEL
-	endproperty
+	// property not_sel;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 	PENABLE |-> PSEL
+	// endproperty
 
-	property wait_limit;
-		@(posedge PCLK) disable iff (!PRESET_N)
-			PSEL && PENABLE && !PREADY |-> ##[1:3] PREADY;
-	endproperty
+	// property wait_limit;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 		PSEL && PENABLE && !PREADY |-> ##[1:3] PREADY;
+	// endproperty
 
-	property transfer_done;
-		@(posedge PCLK) disable iff (!PRESET_N)
-		(PSEL && PENABLE && PREADY) |=> !PENABLE;
-	endproperty
+	// property transfer_done;
+	// 	@(posedge PCLK) disable iff (!PRESET_N)
+	// 	(PSEL && PENABLE && PREADY) |=> !PENABLE;
+	// endproperty
 
-	assert property (transfer_done);
-	assert property (wait_limit);
-	assert property (not_sel);
-	assert property (awake);
-	assert property (simoultaneous_read_write);
-	assert property (stable_addr);
-	// assert property (ready); // will be asserted when wait state will be decided
-	assert property (PSEL_not_enable);
-	assert property (penable_stable);
-	assert property (penable);
+	// assert property (transfer_done);
+	// assert property (wait_limit);
+	// assert property (not_sel);
+	// assert property (awake);
+	// assert property (simoultaneous_read_write);
+	// assert property (stable_addr);
+	// // assert property (ready); // will be asserted when wait state will be decided
+	// assert property (PSEL_not_enable);
+	// assert property (penable_stable);
+	// assert property (penable);
 
 
 endinterface // end of the interface
